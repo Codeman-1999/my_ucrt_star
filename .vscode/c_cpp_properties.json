@@ -6,7 +6,8 @@
                 "os/include",
                 "trusted_domain/FreeRTOS-Kernel/include"
             ],
-            "defines": []
+            "defines": [],
+			"compileCommands": "${workspaceFolder}/qemu-8.0.2/build/compile_commands.json"
         }
     ],
     "version": 4
