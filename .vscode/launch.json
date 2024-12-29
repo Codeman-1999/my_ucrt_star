@@ -14,7 +14,7 @@
             "MIMode": "gdb",
             "miDebuggerServerAddress": "localhost:1234",
             "preLaunchTask": "build  timeros",
-            "miDebuggerPath": "/home/timer/riscv/riscv64-elf/bin/riscv64-unknown-elf-gdb"
+            "miDebuggerPath": "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gdb"
         }
     ]
 }
