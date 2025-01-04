@@ -88,4 +88,7 @@ config SPIKE
 config QUARD_STAR
 	bool
 	select SERIAL
-	select PFLASH_CFI01 ##选中FLASH
+	select PFLASH_CFI01 ##Pflash
+    select RISCV_ACLINT ##ACLINE
+    select RISCV_APLIC  ##APLIC
+    select SIFIVE_PLIC  ##SIFIVE_PLIC
