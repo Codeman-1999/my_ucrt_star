@@ -30,7 +30,7 @@
 #define VIRT_SOCKETS_MAX               (1 << VIRT_SOCKETS_MAX_BITS)
 
 #define TYPE_RISCV_VIRT_MACHINE MACHINE_TYPE_NAME("virt")
-typedef struct RISCVVirtState RISCVVirtState;
+typedef struct RISCVVirtState RISCVVirtState;  //
 DECLARE_INSTANCE_CHECKER(RISCVVirtState, RISCV_VIRT_MACHINE,
                          TYPE_RISCV_VIRT_MACHINE)
 
@@ -42,7 +42,7 @@ typedef enum RISCVVirtAIAType {
 
 struct RISCVVirtState {
     /*< private >*/
-    MachineState parent;
+    MachineState parent;	//继承MachineState
 
     /*< public >*/
     Notifier machine_done;
@@ -86,8 +86,8 @@ enum {
 };
 
 enum {
-    UART0_IRQ = 10,
-    RTC_IRQ = 11,
+    UART0_IRQ = 10,  //串口中断号
+    RTC_IRQ = 11,	//RTC中断号
     VIRTIO_IRQ = 1, /* 1 to 8 */
     VIRTIO_COUNT = 8,
     PCIE_IRQ = 0x20, /* 32 to 35 */

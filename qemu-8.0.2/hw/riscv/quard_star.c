@@ -1,5 +1,4 @@
 #include "qemu/osdep.h"
-#include "qemu/typedefs.h"
 #include "qemu/units.h"
 #include "qemu/error-report.h"
 #include "qemu/guest-random.h"
@@ -17,19 +16,30 @@
 #include "hw/riscv/numa.h"
 #include "hw/intc/riscv_aclint.h"
 #include "hw/intc/riscv_aplic.h"
+#include "hw/intc/riscv_imsic.h"
+#include "hw/platform-bus.h"
+#include "hw/intc/sifive_plic.h"
+#include "hw/misc/sifive_test.h"
 
 #include "chardev/char.h"
 #include "sysemu/device_tree.h"
 #include "sysemu/sysemu.h"
 #include "sysemu/kvm.h"
 #include "sysemu/tpm.h"
+#include "hw/pci/pci.h"
+#include "hw/pci-host/gpex.h"
+#include "hw/display/ramfb.h"
+#include "hw/acpi/aml-build.h"
+#include "qapi/qapi-visit-common.h"
 
 static const MemMapEntry quard_star_memmap[]={
-	[QUARD_STAR_MROM]  = {       0x0,0x8000},
-	[QUARD_STAR_SRAM]  = {    0x8000,0x8000},
-	[QUARD_STAR_UART0] = {0x10000000, 0x100},
-	[QUARD_STAR_DRAM]  = {0x80000000,  0x80},
+	[QUARD_STAR_MROM]  = {       0x0,    0x8000},
+	[QUARD_STAR_SRAM]  = {    0x8000,    0x8000},
+	[QUARD_STAR_UART0] = {0x10000000,     0x100},
+	[QUARD_STAR_FLASH] = {0x20000000, 0x2000000},
+	[QUARD_STAR_DRAM]  = {0x80000000,      0x80},
 };
+
 /*创建CPU*/
 static void quard_star_cpu_create(MachineState *machine)
 {
@@ -72,6 +82,45 @@ static void quard_star_cpu_create(MachineState *machine)
 	}
 }
 
+/* 创建flash并映射 */
+static void quard_star_flash_create(MachineState *machine)
+{
+    #define QUARD_STAR_FLASH_SECTOR_SIZE (256 * KiB)  //0x40000
+    QuardStarState *s = RISCV_VIRT_MACHINE(machine);
+    MemoryRegion *system_memory = get_system_memory();
+    DeviceState *dev = qdev_new(TYPE_PFLASH_CFI01);
+
+    qdev_prop_set_uint64(dev, "sector-length", QUARD_STAR_FLASH_SECTOR_SIZE);
+    qdev_prop_set_uint8(dev, "width", 4);
+    qdev_prop_set_uint8(dev, "device-width", 2);
+    qdev_prop_set_bit(dev, "big-endian", false);
+    qdev_prop_set_uint16(dev, "id0", 0x89);
+    qdev_prop_set_uint16(dev, "id1", 0x18);
+    qdev_prop_set_uint16(dev, "id2", 0x00);
+    qdev_prop_set_uint16(dev, "id3", 0x00);
+    qdev_prop_set_string(dev, "name","quard-star.flash0");
+
+    object_property_add_child(OBJECT(s), "quard-star.flash0", OBJECT(dev));
+    object_property_add_alias(OBJECT(s), "pflash0",
+                              OBJECT(dev), "drive");
+
+    s->flash = PFLASH_CFI01(dev);
+    pflash_cfi01_legacy_drive(s->flash,drive_get(IF_PFLASH, 0, 0));
+
+    hwaddr flashsize = quard_star_memmap[QUARD_STAR_FLASH].size;
+    hwaddr flashbase = quard_star_memmap[QUARD_STAR_FLASH].base;
+
+    assert(QEMU_IS_ALIGNED(flashsize, QUARD_STAR_FLASH_SECTOR_SIZE));
+    assert(flashsize / QUARD_STAR_FLASH_SECTOR_SIZE <= UINT32_MAX);
+    qdev_prop_set_uint32(dev, "num-blocks", flashsize / QUARD_STAR_FLASH_SECTOR_SIZE);
+    sysbus_realize_and_unref(SYS_BUS_DEVICE(dev), &error_fatal);
+
+    memory_region_add_subregion(system_memory, flashbase,
+                                sysbus_mmio_get_region(SYS_BUS_DEVICE(dev),
+                                                       0));
+}
+
+
 /* 创建内存 */
 static void quard_star_memory_create(MachineState *machine)
 {
@@ -91,11 +140,12 @@ static void quard_star_memory_create(MachineState *machine)
 	memory_region_init_rom(mask_rom,NULL,"riscv_quard_star_board.mrom",quard_star_memmap[QUARD_STAR_MROM].size,&error_fatal);
 	memory_region_add_subregion(system_memory, quard_star_memmap[QUARD_STAR_MROM].base,mask_rom);
 
-	riscv_setup_rom_reset_vec(machine,&s->soc[0], 
-							  quard_star_memmap[QUARD_STAR_MROM].base,
-							  quard_star_memmap[QUARD_STAR_MROM].base,
-							  quard_star_memmap[QUARD_STAR_MROM].size,
-							  0x0,0x0);
+	/* 从0号cpu开始加载复位程序，随后跳转到 flash位置开始执行*/
+    riscv_setup_rom_reset_vec(machine, &s->soc[0], 
+                              quard_star_memmap[QUARD_STAR_FLASH].base,
+                              quard_star_memmap[QUARD_STAR_MROM].base,
+                              quard_star_memmap[QUARD_STAR_MROM].size,
+                              0x0, 0x0);
 }
 
 /* quard-star 初始化各种硬件 */
@@ -103,8 +153,13 @@ static void quard_star_machine_init(MachineState *machine)
 {
 	//创建cpu
 	quard_star_cpu_create(machine);
+
 	//创建内存
 	quard_star_memory_create(machine);
+
+	//创建flash
+	quard_star_flash_create(machine);
+
 }
 
 static void quard_star_machine_instance_init(Object *obj)
@@ -112,22 +167,22 @@ static void quard_star_machine_instance_init(Object *obj)
 
 }
 
-/* 创建machine */
-static void quard_star_machine_class_init(ObjectClass *oc,void *data)
+/* 注册 quard-star */
+static void quard_star_machine_class_init(ObjectClass *oc, void *data)
 {
-	MachineClass *mc=MACHINE_CLASS(oc);
+    MachineClass *mc = MACHINE_CLASS(oc);
 
-	mc->desc="RISC-V Quard Star board";
-	mc->init=quard_star_machine_init;
-	mc->max_cpus=QUARD_STAR_CPUS_MAX;
-	mc->default_cpu_type=TYPE_RISCV_CPU_BASE;
-	mc->pci_allow_0_address=true;
-	mc->possible_cpu_arch_ids=riscv_numa_possible_cpu_arch_ids;
-	mc->cpu_index_to_instance_props = riscv_numa_cpu_index_to_props;
-	mc->get_default_cpu_node_id=riscv_numa_get_default_cpu_node_id;
-	mc->numa_mem_supported=true;
+    mc->desc = "RISC-V Quard Star board";
+    mc->init = quard_star_machine_init;
+    mc->max_cpus = QUARD_STAR_CPUS_MAX;
+    mc->default_cpu_type = TYPE_RISCV_CPU_BASE;
+    mc->pci_allow_0_address = true;
+    mc->possible_cpu_arch_ids = riscv_numa_possible_cpu_arch_ids;
+    mc->cpu_index_to_instance_props = riscv_numa_cpu_index_to_props;
+    mc->get_default_cpu_node_id = riscv_numa_get_default_cpu_node_id;
+    mc->numa_mem_supported = true;
 }
-/* 注册quard-star */
+
 static const TypeInfo quard_star_machine_typeinfo={
 	.name=MACHINE_TYPE_NAME("quard-star"),
 	.parent=TYPE_MACHINE,
