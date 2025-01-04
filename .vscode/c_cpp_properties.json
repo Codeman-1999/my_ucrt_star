@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "os/include",
-                "trusted_domain/FreeRTOS-Kernel/include"
+                "trusted_domain/FreeRTOS-Kernel/include",
+				"${workspaceFolder}/qemu-8.0.2/include"
             ],
             "defines": [],
 			"compileCommands": "${workspaceFolder}/qemu-8.0.2/build/compile_commands.json"
