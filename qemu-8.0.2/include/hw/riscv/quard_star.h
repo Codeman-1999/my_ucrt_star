@@ -11,31 +11,37 @@
 
 #define TYPE_RISCV_QUARD_STAR_MACHINE MACHINE_TYPE_NAME("quard-star")
 typedef struct QuardStarState QuardStarState;
-DECLARE_INSTANCE_CHECKER(QuardStarState, RISCV_VIRT_MACHINE,TYPE_RISCV_QUARD_STAR_MACHINE)
+DECLARE_INSTANCE_CHECKER(QuardStarState, RISCV_VIRT_MACHINE,
+                         TYPE_RISCV_QUARD_STAR_MACHINE)
 
-struct QuardStarState
-{
-	/* <private> */
-	MachineState parent;
+struct QuardStarState {
+    /*< private >*/
+    MachineState parent;
 
-	/* <pubilc> */
-	RISCVHartArrayState soc[QUARD_STAR_SOCKETS_MAX];
-	PFlashCFI01 *flash;
-	DeviceState *plic[QUARD_STAR_SOCKETS_MAX];
-};
-
-enum{
-	QUARD_STAR_MROM,
-	QUARD_STAR_SRAM,
-	QUARD_STAR_CLINT,
-    QUARD_STAR_PLIC,
-	QUARD_STAR_UART0,
-	QUARD_STAR_FLASH,
-	QUARD_STAR_DRAM,
+    /*< public >*/
+    RISCVHartArrayState soc[QUARD_STAR_SOCKETS_MAX];
+    PFlashCFI01 *flash;
+    DeviceState *plic[QUARD_STAR_SOCKETS_MAX];
 };
 
 enum {
-	QUARD_STAR_UART0_IRQ = 10,//定义了串口中断号为10
+    QUARD_STAR_MROM,
+    QUARD_STAR_SRAM,
+    QUARD_STAR_CLINT,
+    QUARD_STAR_PLIC,
+    QUARD_STAR_UART0,
+    QUARD_STAR_UART1,
+    QUARD_STAR_UART2,
+    QUARD_STAR_RTC,
+    QUARD_STAR_FLASH,
+    QUARD_STAR_DRAM,
+};
+
+enum {
+    QUARD_STAR_UART0_IRQ = 10,  //定义了串口中断号为10
+    QUARD_STAR_UART1_IRQ = 11,
+    QUARD_STAR_UART2_IRQ = 12,
+    QUARD_STAR_RTC_IRQ   = 13,
 };
 
 #define QUARD_STAR_PLIC_NUM_SOURCES    127      //PLIC 支持的中断源的最大数量
