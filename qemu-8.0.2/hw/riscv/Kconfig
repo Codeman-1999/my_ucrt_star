@@ -86,9 +86,10 @@ config SPIKE
     select SIFIVE_PLIC
 
 config QUARD_STAR
-	bool
-	select SERIAL
-	select PFLASH_CFI01 ##Pflash
-    select RISCV_ACLINT ##ACLINE
-    select RISCV_APLIC  ##APLIC
-    select SIFIVE_PLIC  ##SIFIVE_PLIC
+    bool
+    select SERIAL
+    select PFLASH_CFI01
+    select RISCV_ACLINT
+    select RISCV_APLIC
+    select SIFIVE_PLIC
+    select GOLDFISH_RTC
