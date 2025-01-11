@@ -44,7 +44,8 @@ static const MemMapEntry quard_star_memmap[] = {
     [QUARD_STAR_RTC]   = { 0x10003000,        0x1000 },
     [QUARD_STAR_FLASH] = { 0x20000000,    0x2000000 },   
     [QUARD_STAR_DRAM]  = { 0x80000000,    0x40000000 },   
-};
+}; //内存映射表
+
 
 /*创建CPU */
 static void quard_star_cpu_create(MachineState *machine)
