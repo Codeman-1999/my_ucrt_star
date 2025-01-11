@@ -15,3 +15,4 @@ SECTIONS                /*定义段域*/
     KEEP(*(.text))      /*将所有.text段链接在此域内，keep是保持防止优化，即无论如何都保留此段*/
   } >flash              /*段域的地址(LMA和VMA相同)位于名为flash内存域*/
 }
+
