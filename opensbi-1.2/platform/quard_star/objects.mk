@@ -6,7 +6,7 @@
 platform-cppflags-y =
 platform-cflags-y =
 platform-asflags-y =
-platform-ldflags-y =
+platform-ldflags-y =  
 
 # Objects to build
 platform-objs-y += platform.o
