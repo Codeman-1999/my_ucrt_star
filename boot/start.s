@@ -69,4 +69,4 @@ _no_wait:
 	slli	t0,	t0, 20       //t0 = 0x80000000
     jr      t0
 
-    .end
+    .end 
