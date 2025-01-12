@@ -14,4 +14,3 @@ SECTIONS
     KEEP(*(.text))
   } >ddr
 }
-  

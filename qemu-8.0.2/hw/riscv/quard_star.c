@@ -44,8 +44,7 @@ static const MemMapEntry quard_star_memmap[] = {
     [QUARD_STAR_RTC]   = { 0x10003000,        0x1000 },
     [QUARD_STAR_FLASH] = { 0x20000000,    0x2000000 },   
     [QUARD_STAR_DRAM]  = { 0x80000000,    0x40000000 },   
-}; //内存映射表
-
+};
 
 /*创建CPU */
 static void quard_star_cpu_create(MachineState *machine)
@@ -215,7 +214,7 @@ static void quard_star_aclint_create(MachineState *machine)
             RISCV_ACLINT_DEFAULT_TIMEBASE_FREQ, true);
     }
 }
-/* 创建3个 uart */
+ /* 创建3个 uart */
 static void quard_star_serial_create(MachineState *machine)
 {
     MemoryRegion *system_memory = get_system_memory();
@@ -230,7 +229,7 @@ static void quard_star_serial_create(MachineState *machine)
     serial_mm_init(system_memory, quard_star_memmap[QUARD_STAR_UART2].base,
         0, qdev_get_gpio_in(DEVICE(s->plic[0]), QUARD_STAR_UART2_IRQ), 399193,
         serial_hd(2), DEVICE_LITTLE_ENDIAN);
-}
+ } 
 
 
 

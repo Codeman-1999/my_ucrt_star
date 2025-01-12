@@ -1511,7 +1511,7 @@ static void virt_machine_init(MachineState *machine)
 
     sysbus_create_simple("goldfish_rtc", memmap[VIRT_RTC].base,
         qdev_get_gpio_in(DEVICE(mmio_irqchip), RTC_IRQ));
-
+/* 创建flash*/
     virt_flash_create(s);
 
     for (i = 0; i < ARRAY_SIZE(s->flash); i++) {
