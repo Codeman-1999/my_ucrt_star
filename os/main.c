@@ -4,9 +4,10 @@
 void os_main()
 {
    printf("hello timer os!\n");
-   app_init_context();
-   while (1)
-   {
-      
-   }
+   
+   trap_init();
+
+   task_init();
+
+   run_first_task();
 }
