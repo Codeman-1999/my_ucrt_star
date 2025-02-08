@@ -2,5 +2,11 @@
 	"files.associations": {
 		"tpm.h": "c"
 	},
-	"git.ignoreLimitWarning": true
+	"git.ignoreLimitWarning": true,
+	"clangd.arguments": [
+        "--background-index",
+        "--compile-commands-dir=${workspaceFolder}",
+        "--completion-style=detailed",
+        "--header-insertion=never"
+    ]
 }

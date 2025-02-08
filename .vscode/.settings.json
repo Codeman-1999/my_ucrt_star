@@ -1,5 +1,0 @@
-{
-	"clangd.arguments": [
-        "--compile-commands-dir=${workspaceFolder}/qemu-8.0.2/build/"
-    ]
-}

@@ -1,0 +1,285 @@
+[
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-x",
+      "assembler-with-cpp",
+      "-c",
+      "-o",
+      "/home/user/Study/my_ucrt_star/output/lowlevelboot/start.o",
+      "start.s"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/boot",
+    "file": "/home/user/Study/my_ucrt_star/boot/start.s",
+    "output": "/home/user/Study/my_ucrt_star/output/lowlevelboot/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-x",
+      "assembler-with-cpp",
+      "-c",
+      "-o",
+      "/home/user/Study/my_ucrt_star/output/trusted_domain/startup.o",
+      "startup.s"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/trusted_domain",
+    "file": "/home/user/Study/my_ucrt_star/trusted_domain/startup.s",
+    "output": "/home/user/Study/my_ucrt_star/output/trusted_domain/startup.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "entry.o",
+      "src/entry.S"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/entry.S",
+    "output": "/home/user/Study/my_ucrt_star/os/entry.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "kerneltrap.o",
+      "src/kerneltrap.S"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/kerneltrap.S",
+    "output": "/home/user/Study/my_ucrt_star/os/kerneltrap.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "switch.o",
+      "src/switch.S"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/switch.S",
+    "output": "/home/user/Study/my_ucrt_star/os/switch.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "sbi.o",
+      "src/sbi.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/sbi.c",
+    "output": "/home/user/Study/my_ucrt_star/os/sbi.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/main.c",
+    "output": "/home/user/Study/my_ucrt_star/os/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "printk.o",
+      "src/printk.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/printk.c",
+    "output": "/home/user/Study/my_ucrt_star/os/printk.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "trap.o",
+      "src/trap.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/trap.c",
+    "output": "/home/user/Study/my_ucrt_star/os/trap.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "syscall.o",
+      "src/syscall.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/syscall.c",
+    "output": "/home/user/Study/my_ucrt_star/os/syscall.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "string.o",
+      "lib/string.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/lib/string.c",
+    "output": "/home/user/Study/my_ucrt_star/os/string.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "app.o",
+      "src/app.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/app.c",
+    "output": "/home/user/Study/my_ucrt_star/os/app.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "task.o",
+      "src/task.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/task.c",
+    "output": "/home/user/Study/my_ucrt_star/os/task.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "timer.o",
+      "src/timer.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/timer.c",
+    "output": "/home/user/Study/my_ucrt_star/os/timer.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "stack.o",
+      "lib/stack.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/lib/stack.c",
+    "output": "/home/user/Study/my_ucrt_star/os/stack.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "address.o",
+      "src/address.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/address.c",
+    "output": "/home/user/Study/my_ucrt_star/os/address.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "assert.o",
+      "src/assert.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/src/assert.c",
+    "output": "/home/user/Study/my_ucrt_star/os/assert.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "vsprintf.o",
+      "lib/vsprintf.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/lib/vsprintf.c",
+    "output": "/home/user/Study/my_ucrt_star/os/vsprintf.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gcc",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-I./include",
+      "-c",
+      "-o",
+      "printf.o",
+      "lib/printf.c"
+    ],
+    "directory": "/home/user/Study/my_ucrt_star/os",
+    "file": "/home/user/Study/my_ucrt_star/os/lib/printf.c",
+    "output": "/home/user/Study/my_ucrt_star/os/printf.o"
+  }
+]
