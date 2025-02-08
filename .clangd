@@ -1,0 +1,14 @@
+CompileFlags:
+  Add: 
+    - "-I."
+    - "-I./include"
+    - "-I./os/include"
+    - "-I./opensbi-1.2/include"
+    # 添加其他需要的include路径
+
+Diagnostics:
+  UnusedIncludes: Strict
+  ClangTidy:
+    Add: 
+      - performance-*
+      - bugprone-*
