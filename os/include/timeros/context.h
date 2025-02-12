@@ -1,7 +1,9 @@
 #ifndef TOS_CONTEXT_H__
 #define TOS_CONTEXT_H__
 
-#include "os.h"
+// #include "os.h"
+#include "types.h"  // 只包含必要的头文件
+
 
 /*S模式的trap上下文*/
 typedef struct TrapContext {

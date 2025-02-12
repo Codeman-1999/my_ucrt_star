@@ -1,6 +1,7 @@
 {
 	"files.associations": {
-		"tpm.h": "c"
+		"tpm.h": "c",
+		"os.h": "c"
 	},
 	"git.ignoreLimitWarning": true,
 	"clangd.arguments": [

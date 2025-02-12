@@ -1,6 +1,6 @@
 #include <timeros/os.h>
-#define CLOCK_FREQ 10000000
-#define TICKS_PER_SEC 200
+#define CLOCK_FREQ 10000000 
+#define TICKS_PER_SEC 500
 
 
 /* 设置下次时钟中断的cnt值 */
