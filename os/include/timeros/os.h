@@ -10,7 +10,6 @@
 #include "stdio.h"
 #include "syscall.h"
 
-
 /* trap.c */
 extern void trap_init();
 
