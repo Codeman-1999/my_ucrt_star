@@ -10,18 +10,25 @@ void os_main()
    // 内存分配器初始化
    frame_alloctor_init();
 
-
    kvminit();
 
    
-  // kvminithart();
+   kvminithart();
 
    trap_init();
 
-   task_init();
 
-   timer_init();
+   while (1)
+   {
+	/* code */
+   }
    
-   run_first_task();
+
+//    task_init();
+
+//    timer_init();
+
+   
+   // run_first_task();
 
 }

@@ -5,10 +5,13 @@
             "includePath": [
                 "os/include",
                 "trusted_domain/FreeRTOS-Kernel/include",
-				"${workspaceFolder}/qemu-8.0.2/include"
+                "${workspaceFolder}/qemu-8.0.2/include"
             ],
             "defines": [],
-			"compileCommands": "${workspaceFolder}/qemu-8.0.2/build/compile_commands.json"
+            "compileCommands": [
+                "${workspaceFolder}/qemu-8.0.2/build/compile_commands.json"
+            ],
+            "compilerPath": "/usr/bin/gcc"
         }
     ],
     "version": 4
