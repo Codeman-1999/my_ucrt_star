@@ -12,6 +12,7 @@ SRCS_ASM = \
 	entry.S \
 	kerneltrap.S \
 	switch.S \
+	link_app.S \
 
 SRCS_C = \
 	sbi.c \
@@ -28,6 +29,7 @@ SRCS_C = \
 	assert.c \
 	vsprintf.c \
 	printf.c \
+	loader.c \
 
 INCLUDE:=-I./include
 SRC:=./src
@@ -50,6 +52,8 @@ os.elf: ${OBJS}
 %.o : $(SRC)/%.S
 	${CC} ${CFLAGS} $(INCLUDE) -c -o $@ $<
 
+build_app: build.c
+	gcc $< -o build.out
 .PHONY : debug
 debug: 
 	@echo "os debug start..."
@@ -57,5 +61,5 @@ debug:
 
 .PHONY : clean
 clean:
-	rm -rf *.o *.bin 
+	rm -rf *.o *.bin *.out
 
