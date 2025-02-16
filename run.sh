@@ -1,5 +1,5 @@
 SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
-DEFAULT_VC="1080x1400"
+DEFAULT_VC="1080x1200"
 
 $SHELL_FOLDER/output/qemu/bin/qemu-system-riscv64 \
 -M quard-star \
@@ -10,5 +10,6 @@ $SHELL_FOLDER/output/qemu/bin/qemu-system-riscv64 \
 -d in_asm -D qemu.log \
 --serial vc:$DEFAULT_VC --serial vc:$DEFAULT_VC --serial vc:$DEFAULT_VC --monitor vc:$DEFAULT_VC --parallel none \
 #-s -S
-# -nographic --parallel none \
+#-nographic --parallel none \
+
 
