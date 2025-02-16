@@ -1,343 +1,343 @@
 [
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-o",
-            "build.out",
-            "build.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "build.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "stack.o",
-            "src/stack.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/stack.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "app.o",
-            "lib/app.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "lib/app.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "task.o",
-            "src/task.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/task.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "link_app.o",
-            "src/link_app.S"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/link_app.S"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "main.o",
-            "src/main.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/main.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "printk.o",
-            "src/printk.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/printk.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "loader.o",
-            "src/loader.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/loader.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "kerneltrap.o",
-            "src/kerneltrap.S"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/kerneltrap.S"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "string.o",
-            "lib/string.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "lib/string.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "trap.o",
-            "src/trap.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/trap.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "vsprintf.o",
-            "lib/vsprintf.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "lib/vsprintf.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-x",
-            "assembler-with-cpp",
-            "-o",
-            "/home/qzx/Study/my_ucrt_star/output/trusted_domain/startup.o",
-            "startup.s"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/trusted_domain",
-        "file": "startup.s"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "entry.o",
-            "src/entry.S"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/entry.S"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "syscall.o",
-            "src/syscall.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/syscall.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "assert.o",
-            "src/assert.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/assert.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "printf.o",
-            "lib/printf.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "lib/printf.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-x",
-            "assembler-with-cpp",
-            "-o",
-            "/home/qzx/Study/my_ucrt_star/output/lowlevelboot/start.o",
-            "start.s"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/boot",
-        "file": "start.s"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "timer.o",
-            "src/timer.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/timer.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "sbi.o",
-            "src/sbi.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/sbi.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "address.o",
-            "src/address.c"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/address.c"
-    },
-    {
-        "arguments": [
-            "riscv64-unknown-elf-gcc",
-            "-c",
-            "-nostdlib",
-            "-fno-builtin",
-            "-mcmodel=medany",
-            "-g",
-            "-I./include",
-            "-o",
-            "switch.o",
-            "src/switch.S"
-        ],
-        "directory": "/home/qzx/Study/my_ucrt_star/os",
-        "file": "src/switch.S"
-    }
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "sbi.o",
+      "src/sbi.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/sbi.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "app.o",
+      "lib/app.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "lib/app.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "entry.o",
+      "src/entry.S"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/entry.S"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "vsprintf.o",
+      "lib/vsprintf.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "lib/vsprintf.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "stack.o",
+      "src/stack.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/stack.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "printf.o",
+      "lib/printf.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "lib/printf.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-x",
+      "assembler-with-cpp",
+      "-o",
+      "/home/qzx/Study/my_ucrt_star/output/trusted_domain/startup.o",
+      "startup.s"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/trusted_domain",
+    "file": "startup.s"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "kerneltrap.o",
+      "src/kerneltrap.S"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/kerneltrap.S"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "syscall.o",
+      "src/syscall.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/syscall.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "address.o",
+      "src/address.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/address.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "task.o",
+      "src/task.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/task.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "printk.o",
+      "src/printk.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/printk.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "switch.o",
+      "src/switch.S"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/switch.S"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "timer.o",
+      "src/timer.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/timer.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "trap.o",
+      "src/trap.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/trap.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "loader.o",
+      "src/loader.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/loader.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "link_app.o",
+      "src/link_app.S"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/link_app.S"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-x",
+      "assembler-with-cpp",
+      "-o",
+      "/home/qzx/Study/my_ucrt_star/output/lowlevelboot/start.o",
+      "start.s"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/boot",
+    "file": "start.s"
+  },
+  {
+    "arguments": [
+      "gcc",
+      "-c",
+      "-o",
+      "build.out",
+      "build.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "build.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "string.o",
+      "lib/string.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "lib/string.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "assert.o",
+      "src/assert.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/assert.c"
+  },
+  {
+    "arguments": [
+      "riscv64-unknown-elf-gcc",
+      "-c",
+      "-nostdlib",
+      "-fno-builtin",
+      "-mcmodel=medany",
+      "-g",
+      "-I./include",
+      "-o",
+      "main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/qzx/Study/my_ucrt_star/os",
+    "file": "src/main.c"
+  }
 ]

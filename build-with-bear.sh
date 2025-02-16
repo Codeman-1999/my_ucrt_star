@@ -12,9 +12,9 @@ bear bash build.sh
 mv compile_commands.json "${SHELL_FOLDER}/" 2>/dev/null || true
 
 # 合并所有子目录中的compile_commands.json（如果存在的话）
+# 在合并时添加进度提示
 for dir in os opensbi trusted_domain; do
-    if [ -f "${SHELL_FOLDER}/${dir}/compile_commands.json" ]; then
-        jq -s 'add' "${SHELL_FOLDER}/compile_commands.json" "${SHELL_FOLDER}/${dir}/compile_commands.json" > temp.json
-        mv temp.json "${SHELL_FOLDER}/compile_commands.json"
-    fi
+    echo "Merging $dir..."
+    jq -s 'add' "${SHELL_FOLDER}/compile_commands.json" "${SHELL_FOLDER}/${dir}/compile_commands.json" > temp.json
+    mv temp.json "${SHELL_FOLDER}/compile_commands.json"
 done
