@@ -20,15 +20,34 @@ AppMetadata  get_app_data(size_t app_id)
 
     metadata.size = _num_app[app_id+1] - _num_app[app_id];    // 获取app结束地址  
 
+    metadata.id = app_id;
     assert(app_id <= num_app);
 
     return metadata;
+}
+
+/* 根据app的名字返回app的id */
+AppMetadata get_app_data_by_name(char* path)
+{
+    AppMetadata metadata;
+    int app_num = get_num_app();
+    for (size_t i = 0; i < app_num; i++)
+    {
+        if(strcmp(path,app_names[i])==0)
+        {
+           metadata =  get_app_data(i+1);
+           printk("find app:%s id:%d\n",path,metadata.id);
+           return metadata;
+        }
+    }
+    printk("not exit!!\n");
 }
 
 void get_app_names()
 {
     int app_num = get_num_app();
     printk("/**** APPS ****\n");
+    printk("num app:%d\n",app_num);
     for (size_t i = 0; i < app_num; i++)
     {
         if(i==0)
@@ -39,7 +58,7 @@ void get_app_names()
         else
         {
             size_t len = strlen(app_names[i-1]);
-            app_names[i] = (char*)((u64)_app_names + i * len + 1);
+            app_names[i] = (char*)((u64)app_names[i-1] + len + 1);
         }
 
         printk("%s\n",app_names[i]);
@@ -49,7 +68,7 @@ void get_app_names()
     
 }
 
-static u8 flags_to_mmap_prot(u8 flags)
+u8 flags_to_mmap_prot(u8 flags)
 {
     return (flags & PF_R ? PTE_R : 0) | 
            (flags & PF_W ? PTE_W : 0) |
@@ -122,3 +141,5 @@ void load_app(size_t app_id)
                   PAGE_SIZE, PTE_R | PTE_W | PTE_U);
     proc->base_size=proc->ustack;
 }
+
+
