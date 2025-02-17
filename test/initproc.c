@@ -4,10 +4,17 @@
 
 int main()
 {
+   if(sys_fork() == 0)
+   {
+        sys_exec("user_shell");
+   }
+   else
+   {
     while (1)
     {
-       printf("exec!\n");
+        
     }
+    
+   }
     return 0;
 }
-

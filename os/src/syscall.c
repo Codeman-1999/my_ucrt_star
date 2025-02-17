@@ -47,6 +47,8 @@ void __sys_read(size_t fd, const char* data, size_t len)
             c = sbi_console_getchar();
             if(c != -1)
                 break;
+            schedule();
+            continue;
         }
         char* str = translated_byte_buffer(data);
         str[0]  = c;
@@ -63,16 +65,21 @@ uint64_t __sys_gettime()
     return get_time_us();
 }
 
-uint64_t __sys_exec(const char* name)
+int __sys_exec(const char* name)
 {
     char* app_name = translated_byte_buffer(name);
     printk("exec app_name:%s\n",app_name);
-    exec(app_name);
-    return 0;
+    return exec(app_name);
+}
+
+void __sys_exit(u64 exit_code)
+{
+    exit_current_and_run_next(exit_code);
 }
 
 
-uint64_t __SYSCALL(size_t syscall_id, reg_t arg1, reg_t arg2, reg_t arg3) {
+
+int __SYSCALL(size_t syscall_id, reg_t arg1, reg_t arg2, reg_t arg3) {
         switch (syscall_id)
         {
         
@@ -83,6 +90,9 @@ uint64_t __SYSCALL(size_t syscall_id, reg_t arg1, reg_t arg2, reg_t arg3) {
             __sys_read(arg1, arg2, arg3);
         case __NR_sched_yield:
             __sys_yield();
+            break;
+        case __NR_exit:
+            __sys_exit(arg1);
             break;
         case __NR_gettimeofday:
             return __sys_gettime();

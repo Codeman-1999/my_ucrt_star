@@ -61,7 +61,6 @@ void proc_mapstacks(PageTable* kpgtbl)
 void proc_trap(struct TaskControlBlock *p)
 {
   // 为每个程序分配一页trap物理内存
-  printk("alloc trap!\n");
   p->trap_cx_ppn = phys_addr_from_phys_page_num(kalloc()).value;
   // 初始化任务上下文全部为0
   memset(&p->task_context, 0 ,sizeof(p->task_context));
@@ -83,6 +82,16 @@ void proc_pagetable(struct TaskControlBlock *p)
   PageTable_map(&pagetable,virt_addr_from_size_t(TRAPFRAME),phys_addr_from_size_t(p->trap_cx_ppn), \
                 PAGE_SIZE, PTE_R | PTE_W );
   p->pagetable = pagetable;
+}
+
+
+void proc_ustack(struct TaskControlBlock *p)
+{
+      // 映射应用程序用户栈开始地址
+    PhysPageNum ppn = kalloc();
+    u64 paddr = phys_addr_from_phys_page_num(ppn).value;
+    PageTable_map(&p->pagetable,virt_addr_from_size_t(p->ustack - PAGE_SIZE),phys_addr_from_size_t(paddr), \
+                  PAGE_SIZE, PTE_R | PTE_W | PTE_U);
 }
 
 TaskControlBlock* task_create_pt(size_t app_id)
@@ -149,17 +158,15 @@ void schedule()
     /* 轮转调度 */
     int next = _current + 1;
     next = next % _top;
-
+    tasks[_current].task_state = Ready;
     if(tasks[next].task_state == Ready)
     {
         struct TaskContext *current_task_cx_ptr = &(tasks[_current].task_context);
         struct TaskContext *next_task_cx_ptr = &(tasks[next].task_context);
         tasks[next].task_state = Running;
-        tasks[_current].task_state = Ready;
         _current = next;
         __switch(current_task_cx_ptr,next_task_cx_ptr);
     }
-    
 }
 
 void run_first_task()
@@ -224,96 +231,127 @@ int __sys_fork()
   // 子进程返回值为0
   TrapContext* cx_ptr = np->trap_cx_ppn;
   cx_ptr->a0 = 0;
+  cx_ptr->kernel_sp = np->kstack;
   // 复制TCB的信息
   np->entry = p->entry;
   np->base_size = p->base_size;
   np->parent = p;
   np->ustack = p->ustack;
-  // 设置子进程返回地址和内核栈
-  np->task_context.ra = trap_return;
-  np->task_context.sp = np->kstack;
+
+  np->task_context = tcx_init((reg_t)np->kstack);
 
   _top++;
+  printk("sys_fork:%d\n",_top);
   return np->pid;
 }
 
-void exec(const char* name)
+
+
+int exec(const char* name)
 {
 
     AppMetadata metadata = get_app_data_by_name(name);
+    if(metadata.id<0)
+    {
+      return -1;
+    }
     //ELF 文件头
     elf64_ehdr_t *ehdr = metadata.start;
-    //判断 elf 文件的魔数
-    assert(*(u32 *)ehdr==ELFMAG);
-    //判断传入文件是否为 riscv64 的
-    if (ehdr->e_machine != EM_RISCV || ehdr->e_ident[EI_CLASS] != ELFCLASS64)
-    {
-        panic("only riscv64 elf file is supported");
-    }
-    elf64_phdr_t *phdr; 
+    elf_check(ehdr);
 
     struct TaskControlBlock* proc = current_proc();
+    printk("trap frame1:%lx\n",proc->trap_cx_ppn);
     PageTable old_pagetable = proc->pagetable;
     u64 oldsz = proc->base_size;
-    u64  user_satp = current_user_token();  
     //重新分配页表
     proc_pagetable(proc);
-    for (size_t i = 0; i < ehdr->e_phnum; i++)
-    {
-        //拿到每个Program Header的指针
-        phdr =(u64) (ehdr->e_phoff + ehdr->e_phentsize * i + metadata.start);
-        if(phdr->p_type == PT_LOAD)
-        {
-            // 获取映射内存段开始位置
-            u64 start_va = phdr->p_vaddr;
-            // 获取映射内存段结束位置
-            proc->ustack = start_va + phdr->p_memsz;
-            //  转换elf的可读，可写，可执行的 flags
-            u8 map_perm = PTE_U | flags_to_mmap_prot(phdr->p_flags);
-            // 获取映射内存大小,需要向上对齐
-            u64 map_size = PGROUNDUP(phdr->p_memsz);
-            for (size_t j = 0; j < map_size; j+= PAGE_SIZE)
-            {
-                // 分配物理内存，加载程序段，然后映射
-                PhysPageNum ppn = kalloc();
-                    //获取到分配的物理内存的地址
-                u64 paddr = phys_addr_from_phys_page_num(ppn).value;
-                memcpy(paddr, metadata.start + phdr->p_offset + j, PAGE_SIZE);
-                    //内存逻辑段内存映射
-                PageTable_map(&proc->pagetable,virt_addr_from_size_t(start_va + j), \
-                                phys_addr_from_size_t(paddr), PAGE_SIZE , map_perm);
-                
-            }
-        
-            
-        }
-    }
-
-    // 映射应用程序用户栈开始地址
-    proc->ustack =  2 * PAGE_SIZE + PGROUNDUP(proc->ustack);
-    PhysPageNum ppn = kalloc();
-    u64 paddr = phys_addr_from_phys_page_num(ppn).value;
-    PageTable_map(&proc->pagetable,virt_addr_from_size_t(proc->ustack - PAGE_SIZE),phys_addr_from_size_t(paddr), \
-                  PAGE_SIZE, PTE_R | PTE_W | PTE_U);
-    proc->base_size=proc->ustack;
-
+    printk("trap frame2:%lx\n",proc->trap_cx_ppn);
+    //加载程序段
+    load_segment(ehdr,proc);
+    //映射应用程序用户栈开始地址
+    proc_ustack(proc);
 
     TrapContext* cx_ptr = proc->trap_cx_ppn;
     cx_ptr->sepc = (u64)ehdr->e_entry;
     cx_ptr->sp = proc->ustack;
-    reg_t sstatus = r_sstatus();
-    // 设置 sstatus 寄存器第8位即SPP位为0 表示为U模式
-    sstatus &= (0U << 8);
-    w_sstatus(sstatus);
-    cx_ptr->sstatus = sstatus; 
-    // 设置内核页表token
-    cx_ptr->kernel_satp = kernel_satp;
-    // 设置内核栈虚拟地址
-    cx_ptr->kernel_sp = proc->kstack;
-    // 设置内核trap_handler的地址
-    cx_ptr->trap_handler = (u64)trap_handler;
-    uvmunmap(&old_pagetable, floor_virts(virt_addr_from_size_t(TRAMPOLINE)), 1, 0);
-    uvmunmap(&old_pagetable, floor_virts(virt_addr_from_size_t(TRAPFRAME)), 1, 1);
-    uvmfree(&old_pagetable, oldsz);
-    user_satp = current_user_token();  
+
+
+    
+    proc_freepagetable(&old_pagetable,oldsz);
+    printk("sys_exec\n");
+    return 0;
 }
+
+
+void freeproc(struct TaskControlBlock* p)
+{
+    proc_freepagetable(&p->pagetable, p->base_size);
+
+    p->pagetable.root_ppn.value = 0;
+    p->base_size = 0;
+    p->parent =  0;
+    p->ustack = 0;
+    p->entry = 0;
+    p->task_state = UnInit;
+    p->exit_code = 0;
+}
+
+void children_proc_clear(struct TaskControlBlock *p)
+{
+  struct TaskControlBlock *children;
+  for(p = tasks; p < &tasks[MAX_TASKS]; p++)
+  {
+    if(children->parent == p)
+    {
+      children->parent = &tasks[0];
+    }
+  }
+}
+
+void exit_current_and_run_next(u64 exit_code)
+{
+  /* 不能把0号进程干掉了 */
+  struct TaskControlBlock* p = current_proc();
+  if(p->pid == 0)
+  {
+    panic("init exiting");
+  }
+
+  p->exit_code = exit_code;
+  p->task_state = Zombie;
+  children_proc_clear(p);
+  schedule();
+}
+
+
+int wait()
+{
+  struct TaskControlBlock *children;
+  struct TaskControlBlock* p = current_proc();
+  int pid,havekids;
+
+  for(;;)
+  {
+    havekids = 0;
+    for(children = tasks; children < &tasks[MAX_TASKS];children++)
+    {
+      if(children->parent == p)
+      {
+        havekids = 1;
+        if(children->exit_code == Zombie)
+        {
+
+          pid = children->pid;
+          freeproc(children);
+          return pid;
+        }
+      }
+    }
+    // 如果此进程没有子进程，则返回 -1
+    if(!havekids)
+    {
+      return -1;
+    }
+  }
+}
+
