@@ -4,7 +4,6 @@ output
 qemu-8.0.2/build
 qemu.log
 opensbi-0.9
-tests
 *.elf
 *.map
 qemu-8.0.2/tests/keys/id_rsa
