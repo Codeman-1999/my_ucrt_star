@@ -14,7 +14,6 @@ int main()
     char line[BUFFER_SIZE];
     while (1)
     {
-        //printf("debug\n");
         char c = getchar();
         switch (c)
         {
@@ -27,7 +26,11 @@ int main()
                 printf("pid:%d\n",pid);
                 if(pid==0)
                 {
-                    sys_exec("xec");
+                    sys_exec(line);
+                } else if(pid > 0){
+                    int status = sys_waitpid(pid);
+                    printf("child proc exit:%d\n", status);
+                    printf(">> ");
                 }
             }
             break;
@@ -43,8 +46,6 @@ int main()
             strncat(line,(char*)&c,1);
             break;
         }
-
-
     }
     
     return 0;

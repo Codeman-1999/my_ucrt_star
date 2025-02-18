@@ -8,7 +8,7 @@ INCLUDE:=-I../include
 
 LIB = ../lib
 
-all: time  xec user_shell
+all: time xec user_shell
 
 write: write.c $(LIB)/*.c
 	${CC} ${CFLAGS} $(INCLUDE) -T user.ld $^ -o bin/write 

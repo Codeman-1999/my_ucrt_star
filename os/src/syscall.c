@@ -77,7 +77,9 @@ void __sys_exit(u64 exit_code)
     exit_current_and_run_next(exit_code);
 }
 
-
+int __sys_wait(){
+    return wait();
+}
 
 int __SYSCALL(size_t syscall_id, reg_t arg1, reg_t arg2, reg_t arg3) {
         switch (syscall_id)
@@ -100,6 +102,8 @@ int __SYSCALL(size_t syscall_id, reg_t arg1, reg_t arg2, reg_t arg3) {
             return __sys_fork();
         case __NR_execve:
             return __sys_exec(arg2);
+        case __NR_waitid:
+            return __sys_wait();
         default:
             printk("Unsupported syscall id:%d\n",syscall_id);
             break;
