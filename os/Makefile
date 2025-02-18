@@ -39,6 +39,8 @@ OBJS = $(SRCS_ASM:.S=.o)
 OBJS += $(SRCS_C:.c=.o)
 
 
+all: build_app os.elf
+
 os.elf: ${OBJS}
 	${CC} ${CFLAGS} -T os.ld -Wl,-Map=os.map -o os.elf $^
 	${OBJCOPY} -O binary os.elf os.bin
@@ -53,7 +55,10 @@ os.elf: ${OBJS}
 	${CC} ${CFLAGS} $(INCLUDE) -c -o $@ $<
 
 build_app: build.c
-	gcc $< -o build.out
+	@$(MAKE) -C ./user
+	@gcc $< -o build.out
+	./build.out
+
 .PHONY : debug
 debug: 
 	@echo "os debug start..."
@@ -61,5 +66,6 @@ debug:
 
 .PHONY : clean
 clean:
-	rm -rf *.o *.bin *.out
+	rm -rf *.o *.bin *.out *.map *.elf
+	rm -rf ./user/bin/*
 

@@ -42,10 +42,19 @@ int sys_exec(char* name)
 {
     return syscall(__NR_execve,0,name,0);
 }
+
+int sys_waitpid(){
+    return syscall(__NR_waitid,0,0,0);
+}
+
 /* 获取一个字符 */
 char getchar()
 {
     char data[1];
     sys_read(stdin,data,1);
     return data[0];
+}
+
+int sys_exit(u64 exit_code){
+    return syscall(__NR_exit,exit_code,0,0);
 }
