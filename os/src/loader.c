@@ -41,7 +41,7 @@ AppMetadata get_app_data_by_name(char* path)
            return metadata;
         }
     }
-    printf("app not exit!!\n");
+    printk("app not exit!!\n");
     return metadata;
 }
 

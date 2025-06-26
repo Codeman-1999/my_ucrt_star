@@ -5,6 +5,6 @@ int main()
 {
     while (1)
     {
-        
+        printf("time!!!!!!\n");
     }
 }

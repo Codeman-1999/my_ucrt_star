@@ -3,7 +3,7 @@
 static int _current = 0;
 static int _top = 0;
 
-int nextpid = 1;
+int nextpid = 0;
 
 
 struct TaskControlBlock tasks[MAX_TASKS];
@@ -322,6 +322,7 @@ void exit_current_and_run_next(u64 exit_code)
   p->exit_code = exit_code;
   p->task_state = Zombie;
   children_proc_clear(p);
+  _top--;
   schedule();
   panic("zombie exit");
 }

@@ -30,6 +30,8 @@ SRCS_C = \
 	vsprintf.c \
 	printf.c \
 	loader.c \
+	virtio_disk.c \
+	bio.c \
 
 INCLUDE:=-I./include
 SRC:=./src

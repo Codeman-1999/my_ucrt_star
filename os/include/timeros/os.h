@@ -16,9 +16,10 @@
 #include <timeros/string.h>
 #include <timeros/syscall.h>
 #include <timeros/task.h>
+#include <timeros/virtio.h>
+#include <timeros/bio.h>
 
 /* trap.c */
-extern void trap_init();
 extern void trap_handler();
 extern void trap_return();
 extern void set_kernel_trap_entry();

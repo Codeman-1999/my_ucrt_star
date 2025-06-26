@@ -30,8 +30,9 @@ int main()
                 } else if(pid > 0){
                     int status = sys_waitpid(pid);
                     printf("child proc exit:%d\n", status);
-                    printf(">> ");
                 }
+                line[0] = '\0';
+                printf(">> ");
             }
             break;
         case BS:

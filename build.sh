@@ -108,4 +108,9 @@ dd of=fw.bin bs=1k conv=notrunc seek=4K if=$SHELL_FOLDER/output/trusted_domain/t
 # 写入 os.bin,地址偏移量为 1K*8K =  0x800000
 dd of=fw.bin bs=1k conv=notrunc seek=8K if=$SHELL_FOLDER/output/os/os.bin
 
-
+# 生成64M空的磁盘文件
+echo "------------------------- 生成磁盘文件 ----------------------------"
+if [ ! -d "$SHELL_FOLDER/output/disk" ]; then  
+mkdir $SHELL_FOLDER/output/disk
+fi 
+dd if=/dev/urandom of=$SHELL_FOLDER/output/disk/disk.img bs=64M count=1
