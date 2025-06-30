@@ -9,12 +9,18 @@ rm -f compile_commands.json
 bear bash build.sh
 
 # 移动compile_commands.json到项目根目录
-mv compile_commands.json "${SHELL_FOLDER}/" 2>/dev/null || true
+cp compile_commands.json "${SHELL_FOLDER}/" 2>/dev/null || true
 
-# 合并所有子目录中的compile_commands.json（如果存在的话）
-# 在合并时添加进度提示
-for dir in os opensbi trusted_domain; do
+# 定义所有需要合并的子目录（包含新加入的 qemu 路径）
+SUB_DIRS=("os" "opensbi" "trusted_domain" "qemu-8.0.2/build")
+
+# 合并所有子目录中的compile_commands.json
+for dir in "${SUB_DIRS[@]}"; do
     echo "Merging $dir..."
-    jq -s 'add' "${SHELL_FOLDER}/compile_commands.json" "${SHELL_FOLDER}/${dir}/compile_commands.json" > temp.json
-    mv temp.json "${SHELL_FOLDER}/compile_commands.json"
+    if [ -f "${SHELL_FOLDER}/${dir}/compile_commands.json" ]; then
+        jq -s 'add' "${SHELL_FOLDER}/compile_commands.json" "${SHELL_FOLDER}/${dir}/compile_commands.json" > temp.json
+        mv temp.json "${SHELL_FOLDER}/compile_commands.json"
+    else
+        echo "Warning: $dir/compile_commands.json not found, skipping..."
+    fi
 done
