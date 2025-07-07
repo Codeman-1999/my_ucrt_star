@@ -12,7 +12,7 @@ bear bash build.sh
 cp compile_commands.json "${SHELL_FOLDER}/" 2>/dev/null || true
 
 # 定义所有需要合并的子目录（包含新加入的 qemu 路径）
-SUB_DIRS=("os" "opensbi" "trusted_domain" "qemu-8.0.2/build")
+SUB_DIRS=("os" "opensbi-1.2" "trusted_domain" "qemu-8.0.2/build")
 
 # 合并所有子目录中的compile_commands.json
 for dir in "${SUB_DIRS[@]}"; do

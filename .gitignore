@@ -7,4 +7,4 @@ opensbi-0.9
 *.elf
 *.map
 qemu-8.0.2/tests/keys/id_rsa
-.cache
+.cache/

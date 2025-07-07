@@ -378,59 +378,82 @@ void riscv_rom_copy_firmware_info(MachineState *machine, hwaddr rom_base,
                            &address_space_memory);
 }
 
+/**
+* 设置RISC-V ROM复位向量
+* 
+* @param machine 机器状态指针，用于访问机器级别的配置和状态
+* @param harts RISC-V Hart数组状态指针，用于访问Hart相关的配置和状态
+* @param start_addr 启动地址，CPU将从该地址开始执行
+* @param rom_base ROM基址，复位向量将被放置在此基址开始的区域
+* @param rom_size ROM大小，用于确保复位向量完全包含在ROM内
+* @param kernel_entry 内核入口地址，启动时跳转的目标地址
+* @param fdt_load_addr 设备树blob加载地址，用于传递设备树给内核
+*/
 void riscv_setup_rom_reset_vec(MachineState *machine, RISCVHartArrayState *harts,
-                               hwaddr start_addr,
-                               hwaddr rom_base, hwaddr rom_size,
-                               uint64_t kernel_entry,
-                               uint64_t fdt_load_addr)
+	hwaddr start_addr,
+	hwaddr rom_base, hwaddr rom_size,
+	uint64_t kernel_entry,
+	uint64_t fdt_load_addr)
 {
-    int i;
-    uint32_t start_addr_hi32 = 0x00000000;
-    uint32_t fdt_load_addr_hi32 = 0x00000000;
+	int i;
+	uint32_t start_addr_hi32 = 0x00000000;
+	uint32_t fdt_load_addr_hi32 = 0x00000000;
 
-    if (!riscv_is_32bit(harts)) {
-        start_addr_hi32 = start_addr >> 32;
-        fdt_load_addr_hi32 = fdt_load_addr >> 32;
-    }
-    /* reset vector */
-    uint32_t reset_vec[10] = {
-        0x00000297,                  /* 1:  auipc  t0, %pcrel_hi(fw_dyn) */
-        0x02828613,                  /*     addi   a2, t0, %pcrel_lo(1b) */
-        0xf1402573,                  /*     csrr   a0, mhartid  */
-        0,
-        0,
-        0x00028067,                  /*     jr     t0 */
-        start_addr,                  /* start: .dword */
-        start_addr_hi32,
-        fdt_load_addr,               /* fdt_laddr: .dword */
-        fdt_load_addr_hi32,
-                                     /* fw_dyn: */
-    };
-    if (riscv_is_32bit(harts)) {
-        reset_vec[3] = 0x0202a583;   /*     lw     a1, 32(t0) */
-        reset_vec[4] = 0x0182a283;   /*     lw     t0, 24(t0) */
-    } else {
-        reset_vec[3] = 0x0202b583;   /*     ld     a1, 32(t0) */
-        reset_vec[4] = 0x0182b283;   /*     ld     t0, 24(t0) */
-    }
+	/* 处理64位架构的高32位地址 */
+	if (!riscv_is_32bit(harts)) {
+		start_addr_hi32 = start_addr >> 32;
+		fdt_load_addr_hi32 = fdt_load_addr >> 32;
+	}
 
-    if (!harts->harts[0].cfg.ext_icsr) {
-        /*
-         * The Zicsr extension has been disabled, so let's ensure we don't
-         * run the CSR instruction. Let's fill the address with a non
-         * compressed nop.
-         */
-        reset_vec[2] = 0x00000013;   /*     addi   x0, x0, 0 */
-    }
+	/* 复位向量代码结构：
+	* [0] auipc  t0, %pcrel_hi(fw_dyn)  获取固件动态信息的高位地址
+	* [1] addi   a2, t0, %pcrel_lo(1b) 获取固件动态信息的低位地址
+	* [2] csrr   a0, mhartid           读取当前CPU的硬件线程ID
+	* [3][4] 根据架构选择加载指令（32位用lw，64位用ld）
+	* [5] jr     t0                    跳转到启动地址
+	* [6][7] 启动地址（64位时分高低位）
+	* [8][9] 设备树地址（64位时分高低位）
+	*/
+	uint32_t reset_vec[10] = {
+		0x00000297,                  /* 1: auipc t0, 获取PC相对地址高位 */
+		0x02828613,                  /*    addi a2, t0, 计算完整地址低位 */
+		0xf1402573,                  /*    csrr a0, mhartid 读取CPU ID */
+		0,                           /* 占位符，后续根据架构设置 */
+		0,                           /* 占位符，后续根据架构设置 */
+		0x00028067,                  /*    jr t0 跳转到启动地址 */
+		start_addr,                  /* 启动地址低32位 */
+		start_addr_hi32,             /* 启动地址高32位（64位有效） */
+		fdt_load_addr,               /* 设备树地址低32位 */
+		fdt_load_addr_hi32,          /* 设备树地址高32位（64位有效） */
+	};
 
-    /* copy in the reset vector in little_endian byte order */
-    for (i = 0; i < ARRAY_SIZE(reset_vec); i++) {
-        reset_vec[i] = cpu_to_le32(reset_vec[i]);
-    }
-    rom_add_blob_fixed_as("mrom.reset", reset_vec, sizeof(reset_vec),
-                          rom_base, &address_space_memory);
-    riscv_rom_copy_firmware_info(machine, rom_base, rom_size, sizeof(reset_vec),
-                                 kernel_entry);
+	/* 根据架构设置加载指令 */
+	if (riscv_is_32bit(harts)) {
+		reset_vec[3] = 0x0202a583;   /* lw a1, 32(t0) 加载参数1 */
+		reset_vec[4] = 0x0182a283;   /* lw t0, 24(t0) 加载启动地址 */
+	} else {
+		reset_vec[3] = 0x0202b583;   /* ld a1, 32(t0) 64位加载参数1 */
+		reset_vec[4] = 0x0182b283;   /* ld t0, 24(t0) 64位加载启动地址 */
+	}
+
+	/* 处理Zicsr扩展禁用情况 */
+	if (!harts->harts[0].cfg.ext_icsr) {
+		/* 用nop指令替换csrr操作 */
+		reset_vec[2] = 0x00000013;   /* addi x0, x0, 0 空操作 */
+	}
+
+	/* 将复位向量转换为小端格式 */
+	for (i = 0; i < ARRAY_SIZE(reset_vec); i++) {
+		reset_vec[i] = cpu_to_le32(reset_vec[i]);
+	}
+
+	/* 将复位向量写入ROM */
+	rom_add_blob_fixed_as("mrom.reset", reset_vec, sizeof(reset_vec),
+	rom_base, &address_space_memory);
+
+	/* 复制固件动态信息到ROM */
+	riscv_rom_copy_firmware_info(machine, rom_base, rom_size, sizeof(reset_vec),
+		kernel_entry);
 }
 
 void riscv_setup_direct_kernel(hwaddr kernel_addr, hwaddr fdt_addr)

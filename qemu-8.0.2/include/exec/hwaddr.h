@@ -18,9 +18,15 @@ typedef uint64_t hwaddr;
 #define HWADDR_PRIx PRIx64
 #define HWADDR_PRIX PRIX64
 
+/**
+* 定义内存映射条目结构体
+* 用于描述内存区域的基地址和大小
+*/
 typedef struct MemMapEntry {
-    hwaddr base;
-    hwaddr size;
+	// 内存区域的基地址
+	hwaddr base;
+	// 内存区域的大小
+	hwaddr size;
 } MemMapEntry;
 
 #endif

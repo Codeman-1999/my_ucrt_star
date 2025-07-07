@@ -1514,14 +1514,32 @@ bool object_property_get_bool(Object *obj, const char *name,
     return retval;
 }
 
-bool object_property_set_int(Object *obj, const char *name,
-                             int64_t value, Error **errp)
+/**
+ * object_property_set_int: 设置对象的整数属性
+ * 
+ * 该函数将一个整数值设置为对象的指定属性。它首先将整数转换为QNum对象，
+ * 然后调用object_property_set_qobject函数来设置属性值。
+ * 
+ * @obj: 需要设置属性的对象指针。
+ * @name: 属性名称，用于指定要设置的属性。
+ * @value: 要设置的整数值。
+ * @errp: 错误指针，用于传递错误信息。
+ * 
+ * 返回值:
+ * - 成功时返回true。
+ * - 失败时返回false，并通过errp传递错误信息。
+ */
+ bool object_property_set_int(Object *obj, const char *name,int64_t value, Error **errp)
 {
-    QNum *qnum = qnum_from_int(value);
-    bool ok = object_property_set_qobject(obj, name, QOBJECT(qnum), errp);
+	// 将整数转换为QNum对象
+	QNum *qnum = qnum_from_int(value);
+	// 调用函数设置对象的属性，使用转换后的QNum对象
+	bool ok = object_property_set_qobject(obj, name, QOBJECT(qnum), errp);
 
-    qobject_unref(qnum);
-    return ok;
+	// 释放QNum对象的引用，以避免内存泄漏
+	qobject_unref(qnum);
+	// 返回设置属性的结果
+	return ok;
 }
 
 int64_t object_property_get_int(Object *obj, const char *name,

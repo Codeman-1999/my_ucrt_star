@@ -1,3 +1,5 @@
+# 本代码回被加载到flash执行，主要工作是加载opensbi的固件和设备树，
+# 然后跳转到DRAM处执行opensbi的代码
 
 
 	.macro loop,cunt
