@@ -1,20 +1,141 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "timeros - Build and debug kernel",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/os/os.elf",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/os/src",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerServerAddress": "localhost:1234",
-            "preLaunchTask": "build  timeros",
-            "miDebuggerPath": "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gdb"
-        }
-    ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "timeros - Build and debug kernel",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/os/os.elf",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/os/src",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"miDebuggerServerAddress": "localhost:1234",
+			"preLaunchTask": "build timeros",
+			"miDebuggerPath": "/usr/local/riscv64-unknown-elf-gcc/bin/riscv64-unknown-elf-gdb"
+		},
+		{
+			"name": "QEMU Debug - quard_star.c",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/output/qemu/bin/qemu-system-riscv64",
+			"args": [
+				"-S",
+				"-M",
+				"quard-star",
+				"-m",
+				"1G",
+				"-smp",
+				"8",
+				"-bios",
+				"none",
+				"-drive",
+				"if=pflash,bus=0,unit=0,format=raw,file=${workspaceFolder}/output/lowlevelboot/fw.bin",
+				"-monitor",
+				"stdio",
+				"-no-shutdown",
+				"-no-reboot"
+			],
+			"stopAtEntry": true,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"miDebuggerPath": "gdb",
+			"preLaunchTask": "build qemu debug",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set breakpoint-pending on",
+					"text": "set breakpoint pending on",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set confirm off",
+					"text": "set confirm off",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set breakpoint at main",
+					"text": "break main",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set breakpoint at quard_star_machine_init",
+					"text": "break quard_star_machine_init",
+					"ignoreFailures": false
+				},
+				{
+					"description": "Set breakpoint at quard_star_cpu_create",
+					"text": "break quard_star_cpu_create",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set breakpoint at quard_star_memory_create",
+					"text": "break quard_star_memory_create",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set breakpoint at quard_star_flash_create",
+					"text": "break quard_star_flash_create",
+					"ignoreFailures": true
+				}
+			],
+			"sourceFileMap": {
+				"/build": "${workspaceFolder}/qemu-8.0.2"
+			},
+			"logging": {
+				"engineLogging": true,
+				"programOutput": true,
+				"exceptions": true
+			}
+		},
+		{
+			"name": "QEMU Debug - Step by Step",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/output/qemu/bin/qemu-system-riscv64",
+			"args": [
+				"-S",
+				"-gdb",
+				"tcp::1234",
+				"-M",
+				"quard-star",
+				"-m",
+				"1G",
+				"-smp",
+				"8",
+				"-bios",
+				"none",
+				"-drive",
+				"if=pflash,bus=0,unit=0,format=raw,file=${workspaceFolder}/output/lowlevelboot/fw.bin",
+				"-nographic"
+			],
+			"stopAtEntry": true,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"miDebuggerPath": "gdb",
+			"preLaunchTask": "build qemu debug",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set breakpoint at quard_star_machine_init",
+					"text": "break hw/riscv/quard_star.c:237",
+					"ignoreFailures": false
+				}
+			]
+		}
+	]
 }

@@ -112,25 +112,25 @@ void load_segment(elf64_ehdr_t *ehdr,struct TaskControlBlock* proc)
                 PhysPageNum ppn = kalloc();
                     //获取到分配的物理内存的地址
                 u64 paddr = phys_addr_from_phys_page_num(ppn).value;
-                memcpy(paddr, (u64)ehdr + phdr->p_offset + j, PAGE_SIZE);
-                    //内存逻辑段内存映射
+                memcpy((void *)paddr, (void *)(u64)ehdr + phdr->p_offset + j,
+                       PAGE_SIZE);
+                // 内存逻辑段内存映射
                 PageTable_map(&proc->pagetable,virt_addr_from_size_t(start_va + j), \
                                 phys_addr_from_size_t(paddr), PAGE_SIZE , map_perm);
                 
             }
         }
     }
-    proc->ustack =  2 * PAGE_SIZE + PGROUNDUP(proc->ustack);
+    proc->ustack = 2 * (u64)PAGE_SIZE + (u64)PGROUNDUP(proc->ustack);
     proc->base_size=proc->ustack;
 }
 
 void load_app(size_t app_id)
-
 {
     //加载ELF文件
     AppMetadata metadata = get_app_data(app_id + 1);
     //ELF 文件头
-    elf64_ehdr_t *ehdr = metadata.start;
+    elf64_ehdr_t *ehdr = (elf64_ehdr_t *)(uintptr_t)metadata.start;
     //检查elf 文件
     elf_check(ehdr);
     //创建任务
@@ -138,7 +138,7 @@ void load_app(size_t app_id)
     //加载程序段
     load_segment(ehdr,proc);
     //赋值任务的 entry
-    proc->entry = (u64)ehdr->e_entry;
+    proc->entry = ehdr->e_entry;
     // 映射应用程序用户栈开始地址
     proc_ustack(proc);
 }

@@ -27,11 +27,12 @@ static inline reg_t r_stval()
   return x;
 }
 
-#define SSTATUS_SPP (1L << 8)  // Previous mode, 1=Supervisor, 0=User
-#define SSTATUS_SPIE (1L << 5) // Supervisor Previous Interrupt Enable
-#define SSTATUS_UPIE (1L << 4) // User Previous Interrupt Enable
-#define SSTATUS_SIE (1L << 1)  // Supervisor Interrupt Enable
-#define SSTATUS_UIE (1L << 0)  // User Interrupt Enable
+/*对特权级相关的寄存器的控制*/
+#define SSTATUS_SPP (1L << 8)  // 上一个模式，1=监管者模式，0=用户模式
+#define SSTATUS_SPIE (1L << 5) // 监管者上一个中断使能
+#define SSTATUS_UPIE (1L << 4) // 用户上一个中断使能
+#define SSTATUS_SIE (1L << 1)  // 监管者中断使能
+#define SSTATUS_UIE (1L << 0)  // 用户中断使能
 
 /* sstatus记录S模式下处理器内核的运行状态*/
 static inline reg_t r_sstatus()
@@ -40,7 +41,6 @@ static inline reg_t r_sstatus()
   asm volatile("csrr %0, sstatus" : "=r" (x) );
   return x;
 }
-
 
 static inline void  w_sstatus(reg_t x)
 {

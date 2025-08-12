@@ -1,4 +1,7 @@
 #include <timeros/os.h>
+
+// Declare the sbi_console_putchar function if not included in the header
+void sbi_console_putchar(char c);
 void uart_puts(char *s)
 {
 	while (*s) {

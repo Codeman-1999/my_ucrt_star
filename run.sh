@@ -11,7 +11,7 @@ $SHELL_FOLDER/output/qemu/bin/qemu-system-riscv64 \
 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 \
 -d in_asm -D qemu.log \
 --serial vc:$DEFAULT_VC --serial vc:$DEFAULT_VC --serial vc:$DEFAULT_VC --monitor vc:$DEFAULT_VC --parallel none \
-#-s -S
+-s -S
 #-nographic --parallel none \
 
 
