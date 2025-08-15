@@ -3,7 +3,7 @@
 		{
 			"type": "shell",
 			"label": "build timeros",
-			"command": "cd ${workspaceFolder}/os && make clean && make && cd ${workspaceFolder} && ${workspaceFolder}/build.sh",
+			"command": "${workspaceFolder}/build.sh && cd ${workspaceFolder}/os && make && cd ${workspaceFolder}",
 			"detail": "Build OS and complete system"
 		},
 		{
